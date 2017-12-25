@@ -4,10 +4,11 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Insert title here</title>
+    <title>Demo</title>
 </head>
 
 <body>
-<c:out value="${hello}"></c:out>
+    <p>Hello the world!</p>
+    <p><c:out value="${hello}"></c:out></p>
 </body>
 </html>
