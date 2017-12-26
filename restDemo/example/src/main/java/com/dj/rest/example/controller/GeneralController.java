@@ -1,5 +1,6 @@
 package com.dj.rest.example.controller;
 
+import com.dj.rest.example.dto.DemoDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,16 +22,23 @@ import java.util.Map;
  * @version 1.0
  */
 @Controller
+@RequestMapping("/general")
 public class GeneralController {
 
-    @RequestMapping(value = "/getdate", method = RequestMethod.GET)
+    @RequestMapping(value = "/toIndex", method = RequestMethod.GET)
+    public String toIndex(Model model){
+        DemoDto demoDto = new DemoDto();
+        model.addAttribute("demoDto", demoDto);
+        return "index";
+
+    }
 
     @ResponseBody
-    public Map<String, Object> getDate(HttpServletResponse response) throws IOException {
-        SimpleDateFormat tempDate = new SimpleDateFormat("yyyy-MM-dd");
-        String datetime = tempDate.format(new java.util.Date());
+    @RequestMapping(value = "/getDemo", method = RequestMethod.GET)
+    public Map<String, Object> getDate(){
+        DemoDto demoDto = new DemoDto();
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("data", datetime);
+        map.put("demoDto", demoDto);
         return map;
     }
 }
