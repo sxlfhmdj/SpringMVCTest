@@ -1,16 +1,18 @@
 package com.dj.rest.example.controller;
 
+import com.dj.rest.example.dao.bean.DictionaryBean;
+import com.dj.rest.example.dao.iface.DictionaryDao;
 import com.dj.rest.example.dto.DemoDto;
+import com.dj.rest.example.service.dictionary.DictionaryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,6 +27,9 @@ import java.util.Map;
 @RequestMapping("/general")
 public class GeneralController {
 
+    @Autowired
+    private DictionaryService dictionaryService;
+
     @RequestMapping(value = "/toIndex", method = RequestMethod.GET)
     public String toIndex(Model model){
         DemoDto demoDto = new DemoDto();
@@ -35,10 +40,19 @@ public class GeneralController {
 
     @ResponseBody
     @RequestMapping(value = "/getDemo", method = RequestMethod.GET)
-    public Map<String, Object> getDate(){
+    public Map<String, Object> getDemo(){
         DemoDto demoDto = new DemoDto();
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("demoDto", demoDto);
+        return map;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getDics", method = RequestMethod.GET)
+    public Map<String, Object> getDics(){
+        List<DictionaryBean> lists =  dictionaryService.selectList(null);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("dics", lists);
         return map;
     }
 }

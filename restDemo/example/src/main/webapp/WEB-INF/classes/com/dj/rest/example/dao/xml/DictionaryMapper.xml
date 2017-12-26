@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dj.rest.example.dao.iface.DictionaryDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="baseResultMap" type="com.dj.rest.example.dao.bean.DictionaryBean">
+			<id column="id" property="id" />
+			<id column="pid" property="pid" />
+			<id column="name" property="name" />
+			<id column="code" property="code" />
+			<id column="val" property="val" />
+			<id column="description" property="description" />
+			<id column="sort_no" property="sortNo" />
+			<id column="del_flag" property="delFlag" />
+			<id column="modify_dt" property="modifyDt" />
+    </resultMap>
+
+    <!--基本字段列表-->
+    <sql id="baseColumns">
+        id,
+        pid,
+        name,
+        code,
+        val,
+        description,
+        sort_no,
+        del_flag,
+        modify_dt
+    </sql>
+
+    <!--基本查询-->
+    <sql id="baseSelect">
+        select
+        <include refid="baseColumns"/>
+        from dictionary
+    </sql>
+
+	<!--分页-->
+    <sql id="pagination">
+        limit #{pager.offset}, #{pager.size}
+    </sql>
+
+
+
+
+	<!--查询条件-->
+	<sql id="whereFragement">
+		<where>
+			<if test="entity != null">
+				<if test="entity.id != null and entity.id != ''">
+					and id = #{entity.id}
+				</if>
+				<if test="entity.pid != null">
+					and pid = #{entity.pid}
+				</if>
+				<if test="entity.name != null and entity.name != ''">
+					and name = #{entity.name}
+				</if>
+				<if test="entity.code != null and entity.code != ''">
+					and code = #{entity.code}
+				</if>
+				<if test="entity.val != null and entity.val != ''">
+					and val = #{entity.val}
+				</if>
+				<if test="entity.description != null and entity.description != ''">
+					and description = #{entity.description}
+				</if>
+				<if test="entity.sortNo != null and entity.sortNo != ''">
+					and sort_no = #{entity.sortNo}
+				</if>
+				<if test="entity.delFlag != null ">
+					and del_flag = #{entity.delFlag}
+				</if>
+				<if test="entity.modifyDt != null ">
+					and modify_dt = #{entity.modifyDt}
+				</if>
+			</if>
+		</where>
+	</sql>
+
+    <!--插入数据-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.dj.rest.example.dao.bean.DictionaryBean">
+        insert into dictionary(
+            id,
+            pid,
+            name,
+            code,
+            val,
+            description,
+            sort_no,
+            del_flag,
+            modify_dt
+        )values(
+            #{id},
+            #{pid},
+            #{name},
+            #{code},
+            #{val},
+            #{description},
+            #{sortNo},
+            #{delFlag},
+            #{modifyDt}
+        )
+    </insert>
+
+    <!--根据id删除-->
+    <delete id="deleteById">
+        delete from dictionary where id = #{id}
+    </delete>
+
+    <!--根据id修改-->
+    <update id="updateById">
+        update  dictionary
+        <set>
+                <if test="entity.pid != null and entity.pid != ''">
+                     pid = #{entity.pid},
+                </if>
+                <if test="entity.name != null and entity.name != ''">
+                     name = #{entity.name},
+                </if>
+                <if test="entity.code != null">
+                     code = #{entity.code},
+                </if>
+                <if test="entity.val != null">
+                     val = #{entity.val},
+                </if>
+                <if test="entity.description != null">
+                     description = #{entity.description},
+                </if>
+                <if test="entity.sortNo != null and entity.sortNo != ''">
+                     sort_no = #{entity.sortNo},
+                </if>
+                <if test="entity.delFlag != null ">
+                     del_flag = #{entity.delFlag},
+                </if>
+                <if test="entity.modifyDt != null ">
+                     modify_dt = #{entity.modifyDt},
+                </if>
+        </set>
+        where id = #{entity.id}
+    </update>
+
+
+    <!--根据id查询-->
+    <select id="selectById" resultMap="baseResultMap" >
+        <include refid="baseSelect" />
+        where id = #{id}
+    </select>
+
+    <!--列表查询-->
+	<select id="selectList" resultMap="baseResultMap">
+        <include refid="baseSelect" />
+		<include refid="whereFragement" />
+	</select>
+
+
+    <!--数量查询-->
+	<select id="selectCount" resultType="java.lang.Integer">
+        select count(*) from  dictionary
+		<include refid="whereFragement" />
+	</select>
+
+    <!--分页查询-->
+    <select id="selectPage" resultMap="baseResultMap">
+        <include refid="baseSelect" />
+        <include refid="whereFragement" />
+        <if test="pager!=null">
+            <include refid="pagination" />
+        </if>
+    </select>
+
+
+
+</mapper>
