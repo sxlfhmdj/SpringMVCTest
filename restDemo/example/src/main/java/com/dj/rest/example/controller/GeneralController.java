@@ -1,9 +1,11 @@
 package com.dj.rest.example.controller;
 
+import com.dj.rest.example.common.AjaxInfo;
 import com.dj.rest.example.dao.bean.DictionaryBean;
-import com.dj.rest.example.dao.iface.DictionaryDao;
 import com.dj.rest.example.dto.DemoDto;
 import com.dj.rest.example.service.dictionary.DictionaryService;
+import org.apache.log4j.spi.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +29,8 @@ import java.util.Map;
 @RequestMapping("/general")
 public class GeneralController {
 
+    protected final Logger logger = org.slf4j.LoggerFactory.getLogger(getClass());
+
     @Autowired
     private DictionaryService dictionaryService;
 
@@ -40,19 +44,20 @@ public class GeneralController {
 
     @ResponseBody
     @RequestMapping(value = "/getDemo", method = RequestMethod.GET)
-    public Map<String, Object> getDemo(){
+    public AjaxInfo getDemo(){
         DemoDto demoDto = new DemoDto();
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("demoDto", demoDto);
-        return map;
+        return AjaxInfo.requestSuccess().setData(demoDto);
     }
 
     @ResponseBody
     @RequestMapping(value = "/getDics", method = RequestMethod.GET)
-    public Map<String, Object> getDics(){
-        List<DictionaryBean> lists =  dictionaryService.selectList(null);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("dics", lists);
-        return map;
+    public AjaxInfo getDics(){
+        try{
+            List<DictionaryBean> lists =  dictionaryService.selectList(null);
+            return AjaxInfo.requestSuccess().setData(lists);
+        }catch (Exception e){
+            logger.error("查询字典失败");
+        }
+        return AjaxInfo.requestFail().setMsg("查询字典失败");
     }
 }
