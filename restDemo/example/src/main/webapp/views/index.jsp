@@ -20,7 +20,7 @@
                 type: 'GET',
                 success: function (data) {
                     if(data.code == 200){
-                        alert(data.data);
+                        console.log(data.data);
                     }else {
                         alert(data.msg);
                     }

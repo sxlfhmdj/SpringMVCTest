@@ -1,6 +1,8 @@
 package com.dj.rest.example.service.dictionary;
 
+import com.dj.rest.example.common.Pager;
 import com.dj.rest.example.dao.bean.DictionaryBean;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,4 +17,6 @@ import java.util.List;
 public interface DictionaryService {
 
     List<DictionaryBean> selectList(DictionaryBean entity);
+
+    Pager<DictionaryBean> selectPage(@Param("entity") DictionaryBean entity, @Param("pager") Pager<DictionaryBean> pager);
 }

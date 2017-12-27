@@ -1,5 +1,6 @@
 package com.dj.rest.example.service.dictionary.impl;
 
+import com.dj.rest.example.common.Pager;
 import com.dj.rest.example.dao.bean.DictionaryBean;
 import com.dj.rest.example.dao.iface.DictionaryDao;
 import com.dj.rest.example.service.dictionary.DictionaryService;
@@ -22,9 +23,18 @@ public class DictionaryServiceImpl implements DictionaryService{
     @Autowired
     private DictionaryDao dictionaryDao;
 
+    @Override
     public List<DictionaryBean> selectList(DictionaryBean entity) {
         List<DictionaryBean> resultList = dictionaryDao.selectList(entity);
         return resultList;
     }
 
+    @Override
+    public Pager selectPage(DictionaryBean entity, Pager<DictionaryBean> pager) {
+        List<DictionaryBean> resultPages = dictionaryDao.selectPage(entity, pager);
+        Integer count = dictionaryDao.selectCount(entity);
+        pager.setRecords(resultPages);
+        pager.setTotal(count);
+        return pager;
+    }
 }
